@@ -1,6 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../navigators/RootStackNavigator";
 
-export default function PanoramaScreen({ navigation }: { navigation: any }) {
+type Props = NativeStackScreenProps<RootStackParamList, "Panorama">;
+
+export default function PanoramaScreen({ navigation }: Props) {
   return (
     <View style={styles.container}>
       <Text>Panorama Screen</Text>

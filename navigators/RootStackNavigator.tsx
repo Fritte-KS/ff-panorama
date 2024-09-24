@@ -7,6 +7,7 @@ import SettingsScreen from "../screens/SettingsScreen";
 export type RootStackParamList = {
   Home: NavigatorScreenParams<TabParamList>;
   Settings: undefined;
+  Panorama: undefined;
 };
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
