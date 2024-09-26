@@ -1,8 +1,7 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigatorScreenParams } from "@react-navigation/native";
-import { TabParamList } from "./TabNavigator";
-import TabNavigator from "./TabNavigator";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SettingsScreen from "../screens/SettingsScreen";
+import TabNavigator, { TabParamList } from "./TabNavigator";
 
 export type RootStackParamList = {
   Home: NavigatorScreenParams<TabParamList>;
