@@ -6,7 +6,22 @@ import { Image } from "expo-image";
 
 export default function HomeScreen() {
   const [isPortrait, setIsPortrait] = useState(false);
-  const [focalLength, setFocalLength] = useState(16);
+  const [sliderFocal, setSliderFocal] = useState(16);
+  const [inputFocal, setInputFocal] = useState(String(sliderFocal));
+
+  const defaultFocalLength = 16;
+
+  const handleInputBlur = () => {
+    const numericValue = parseInt(inputFocal, 10);
+
+    // Check if the input numericValue is a number and within the range. If not, set the slider and input focal to the default value
+    if (isNaN(numericValue) || numericValue < 12 || numericValue > 85) {
+      setSliderFocal(defaultFocalLength);
+      setInputFocal(String(defaultFocalLength));
+    } else {
+      setSliderFocal(numericValue); // If the input is valid, update focalLength
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -36,8 +51,9 @@ export default function HomeScreen() {
         <TextInput
           style={styles.focalInput}
           keyboardType="numeric"
-          value={String(focalLength)}
-          onChangeText={(value) => setFocalLength(parseInt(value, 10))}
+          value={inputFocal}
+          onChangeText={(value) => setInputFocal(value)}
+          onBlur={handleInputBlur}
           maxLength={2}
         />
       </View>
@@ -46,8 +62,11 @@ export default function HomeScreen() {
         minimumValue={12}
         maximumValue={85}
         step={1}
-        value={focalLength}
-        onValueChange={(value) => setFocalLength(value)}
+        value={sliderFocal}
+        onValueChange={(value) => {
+          setSliderFocal(value);
+          setInputFocal(String(value));
+        }}
         minimumTrackTintColor="#32D932"
         maximumTrackTintColor="#111"
         thumbTintColor="#32D932"
