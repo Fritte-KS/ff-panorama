@@ -46,6 +46,9 @@ export default function HomeScreen() {
           circleStyle={styles.switchCircle}
         />
       </View>
+
+      <View style={styles.separatorLine} />
+
       <View style={styles.focalWrapper}>
         <Text style={styles.focalLabel}>Select focal length</Text>
         <TextInput
@@ -96,7 +99,7 @@ const styles = StyleSheet.create({
   switchWrapper: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
+    // marginBottom: 10,
   },
   switchLabel: {
     fontSize: 18,
@@ -113,6 +116,13 @@ const styles = StyleSheet.create({
     height: 25,
     borderRadius: 15,
   },
+  separatorLine: {
+    height: 4,
+    borderRadius: 2,
+    width: "90%",
+    backgroundColor: "#bbb",
+    marginVertical: 70,
+  },
   focalWrapper: {
     flexDirection: "row",
     alignItems: "center",
@@ -126,12 +136,13 @@ const styles = StyleSheet.create({
   focalSlider: {
     width: "80%",
     height: 40,
+    marginTop: 10,
   },
   focalInput: {
     width: 45,
     height: 35,
     fontSize: 18,
-    borderColor: "#ccc",
+    borderColor: "#bbb",
     borderWidth: 2,
     borderRadius: 7,
     textAlign: "center",
