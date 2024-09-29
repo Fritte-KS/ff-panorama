@@ -9,7 +9,14 @@ interface Props {
   setInputFocal: (value: string) => void;
 }
 
-export const AppContext = createContext<Props | undefined>(undefined);
+export const AppContext = createContext<Props>({
+  isPortrait: false,
+  setIsPortrait: () => {},
+  sliderFocal: 16,
+  setSliderFocal: () => {},
+  inputFocal: "16",
+  setInputFocal: () => {},
+});
 
 export default function AppProvider({ children }: PropsWithChildren<{}>) {
   const [isPortrait, setIsPortrait] = useState(false);
