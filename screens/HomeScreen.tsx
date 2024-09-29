@@ -1,25 +1,32 @@
-import { useState } from "react";
+import { useContext } from "react";
+import { AppContext } from "../context/AppContext";
 import { StyleSheet, Text, View, TextInput } from "react-native";
 import SwitchToggle from "react-native-switch-toggle";
 import Slider from "@react-native-community/slider";
 import { Image } from "expo-image";
+import FieldOfView from "../components/FieldOfView";
 
 export default function HomeScreen() {
-  const [isPortrait, setIsPortrait] = useState(false);
-  const [sliderFocal, setSliderFocal] = useState(16);
-  const [inputFocal, setInputFocal] = useState(String(sliderFocal));
+  const {
+    isPortrait,
+    setIsPortrait,
+    sliderFocal,
+    setSliderFocal,
+    inputFocal,
+    setInputFocal,
+  } = useContext(AppContext);
 
   const defaultFocalLength = 16;
 
   const handleInputBlur = () => {
     const numericValue = parseInt(inputFocal, 10);
 
-    // Check if the input numericValue is a number and within the range. If not, set the slider and input focal to the default value
+    // Check if the input numericValue is a number and within the range. If not, set the slider and input focal to the default value.
     if (isNaN(numericValue) || numericValue < 12 || numericValue > 85) {
       setSliderFocal(defaultFocalLength);
       setInputFocal(String(defaultFocalLength));
     } else {
-      setSliderFocal(numericValue); // If the input is valid, update focalLength
+      setSliderFocal(numericValue); // If the input is valid, update focalLength.
     }
   };
 
@@ -74,6 +81,7 @@ export default function HomeScreen() {
         maximumTrackTintColor="#111"
         thumbTintColor="#32D932"
       />
+      <FieldOfView />
     </View>
   );
 }
@@ -121,7 +129,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     width: "90%",
     backgroundColor: "#bbb",
-    marginVertical: 70,
+    marginVertical: 40,
   },
   focalWrapper: {
     flexDirection: "row",
@@ -133,11 +141,6 @@ const styles = StyleSheet.create({
     marginRight: 15,
     // marginBottom: 10,
   },
-  focalSlider: {
-    width: "80%",
-    height: 40,
-    marginTop: 10,
-  },
   focalInput: {
     width: 45,
     height: 35,
@@ -148,5 +151,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     // marginTop: 10,
     // marginBottom: 10,
+  },
+  focalSlider: {
+    width: "80%",
+    height: 40,
+    marginVertical: 12,
   },
 });
