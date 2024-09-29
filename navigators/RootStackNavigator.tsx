@@ -4,7 +4,7 @@ import SettingsScreen from "../screens/SettingsScreen";
 import TabNavigator, { TabParamList } from "./TabNavigator";
 
 export type RootStackParamList = {
-  Home: NavigatorScreenParams<TabParamList>;
+  MainHome: NavigatorScreenParams<TabParamList>;
   Settings: undefined;
   Panorama: undefined;
 };
@@ -15,7 +15,7 @@ export default function RootStackNavigator() {
   return (
     <RootStack.Navigator>
       <RootStack.Screen
-        name="Home"
+        name="MainHome"
         component={TabNavigator}
         options={{ headerShown: false }}
       />
