@@ -1,7 +1,6 @@
+import AppProvider from "./context/AppContext";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import AppProvider from "./context/AppContext";
-
 import RootStackNavigator from "./navigators/RootStackNavigator";
 
 export default function App() {
