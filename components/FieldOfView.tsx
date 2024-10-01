@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
 import calculateAngleOfView from "../utils/calculateAngleOfView";
 
@@ -9,7 +9,7 @@ export default function FieldOfView() {
 
   const angleOfView = calculateAngleOfView(sliderFocal, isPortrait);
 
-  const radius = 150; // The radius of the circle
+  const radius = 150; // The radius of the circle.
   const centerX = 130;
   const centerY = 152;
 
@@ -33,10 +33,25 @@ export default function FieldOfView() {
   `;
 
   return (
-    <View style={{ justifyContent: "center", paddingBottom: 20 }}>
+    <View style={s.container}>
+      <Text style={s.angleText}>{angleOfView.toFixed(0)}°</Text>
       <Svg height="160" width="260">
         <Path d={pathData} fill="#B7D5EE" stroke="#bbb" strokeWidth="3" />
       </Svg>
     </View>
   );
 }
+
+const s = StyleSheet.create({
+  container: {
+    justifyContent: "center",
+    paddingBottom: 20,
+  },
+  angleText: {
+    fontSize: 18,
+    marginBottom: -50, // Adjust to move angleOfView illustration up or down, not the text.
+    marginTop: 30, // Adjust to move both text and angleOfView illustration up or down.
+    textAlign: "center",
+    zIndex: 1,
+  },
+});
