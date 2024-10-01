@@ -31,17 +31,17 @@ export default function HomeScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>FF Panorama</Text>
+    <View style={s.container}>
+      <Text style={s.header}>FF Panorama</Text>
       <Image
         source={require("../assets/images/camera_dark.png")}
         style={[
-          styles.cameraImage,
+          s.cameraImage,
           { transform: [{ rotate: isPortrait ? "270deg" : "0deg" }] },
         ]}
       />
-      <View style={styles.switchWrapper}>
-        <Text style={styles.switchLabel}>Portrait mode</Text>
+      <View style={s.switchWrapper}>
+        <Text style={s.switchLabel}>Portrait mode</Text>
         <SwitchToggle
           switchOn={isPortrait}
           onPress={() => setIsPortrait(!isPortrait)}
@@ -49,17 +49,17 @@ export default function HomeScreen() {
           circleColorOff="#f00"
           backgroundColorOn="#ddd"
           backgroundColorOff="#bbb"
-          containerStyle={styles.switchDimension}
-          circleStyle={styles.switchCircle}
+          containerStyle={s.switchDimension}
+          circleStyle={s.switchCircle}
         />
       </View>
 
-      <View style={styles.separatorLine} />
+      <View style={s.separatorLine} />
 
-      <View style={styles.focalWrapper}>
-        <Text style={styles.focalLabel}>Select focal length</Text>
+      <View style={s.focalWrapper}>
+        <Text style={s.focalLabel}>Select focal length</Text>
         <TextInput
-          style={styles.focalInput}
+          style={s.focalInput}
           keyboardType="numeric"
           value={inputFocal}
           onChangeText={(value) => setInputFocal(value)}
@@ -68,7 +68,7 @@ export default function HomeScreen() {
         />
       </View>
       <Slider
-        style={styles.focalSlider}
+        style={s.focalSlider}
         minimumValue={12}
         maximumValue={85}
         step={1}
@@ -86,7 +86,7 @@ export default function HomeScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const s = StyleSheet.create({
   container: {
     flex: 1,
     // backgroundColor: "#fff",

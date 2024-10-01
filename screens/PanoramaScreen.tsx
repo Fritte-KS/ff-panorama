@@ -6,13 +6,13 @@ type Props = NativeStackScreenProps<RootStackParamList, "Panorama">;
 
 export default function PanoramaScreen({ navigation }: Props) {
   return (
-    <View style={styles.container}>
+    <View style={s.container}>
       <Text>Panorama Screen</Text>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
+const s = StyleSheet.create({
   container: {
     flex: 1,
     // backgroundColor: "#fff",
