@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
-import { StyleSheet, Text, View, TextInput } from "react-native";
+import { StyleSheet, Text, View, TextInput, ScrollView } from "react-native";
 import SwitchToggle from "react-native-switch-toggle";
 import Slider from "@react-native-community/slider";
 import { Image } from "expo-image";
@@ -31,7 +31,7 @@ export default function HomeScreen() {
   };
 
   return (
-    <View style={s.container}>
+    <ScrollView contentContainerStyle={s.container}>
       <Text style={s.header}>FF Panorama</Text>
       <Image
         source={require("../assets/images/camera_dark.png")}
@@ -82,16 +82,16 @@ export default function HomeScreen() {
         thumbTintColor="#32D932"
       />
       <FieldOfView />
-    </View>
+    </ScrollView>
   );
 }
 
 const s = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     // backgroundColor: "#fff",
-    alignItems: "center",
     justifyContent: "flex-start",
+    alignItems: "center",
     paddingTop: 15,
   },
   header: {
@@ -107,7 +107,6 @@ const s = StyleSheet.create({
   switchWrapper: {
     flexDirection: "row",
     alignItems: "center",
-    // marginBottom: 10,
   },
   switchLabel: {
     fontSize: 18,
@@ -134,12 +133,10 @@ const s = StyleSheet.create({
   focalWrapper: {
     flexDirection: "row",
     alignItems: "center",
-    // marginTop: 20,
   },
   focalLabel: {
     fontSize: 18,
     marginRight: 15,
-    // marginBottom: 10,
   },
   focalInput: {
     width: 45,
@@ -149,8 +146,6 @@ const s = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 7,
     textAlign: "center",
-    // marginTop: 10,
-    // marginBottom: 10,
   },
   focalSlider: {
     width: "80%",
