@@ -58,6 +58,7 @@ export default function HomeScreen() {
           maxLength={2}
         />
       </View>
+      <FieldOfView />
       <Slider
         style={s.focalSlider}
         minimumValue={12}
@@ -68,10 +69,9 @@ export default function HomeScreen() {
           setSliderFocal(value.toString());
         }}
         minimumTrackTintColor="#32D932"
-        maximumTrackTintColor="#111"
+        maximumTrackTintColor="#bbb"
         thumbTintColor="#32D932"
       />
-      <FieldOfView />
     </ScrollView>
   );
 }
@@ -139,7 +139,7 @@ const s = StyleSheet.create({
   },
   focalSlider: {
     width: "80%",
-    height: 40,
-    marginVertical: 12,
+    height: 15,
+    // marginVertical: 12,
   },
 });
