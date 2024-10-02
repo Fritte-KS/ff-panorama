@@ -50,7 +50,7 @@ const s = StyleSheet.create({
   angleText: {
     fontSize: 18,
     marginBottom: -50, // Adjust to move angleOfView illustration up or down, not the text.
-    marginTop: 30, // Adjust to move both text and angleOfView illustration up or down.
+    marginTop: 50, // Adjust to move both text and angleOfView illustration up or down.
     textAlign: "center",
     zIndex: 1,
   },
