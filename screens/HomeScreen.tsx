@@ -1,32 +1,23 @@
-import { useContext } from "react";
-import { AppContext } from "../context/AppContext";
-import { StyleSheet, Text, View, TextInput, ScrollView } from "react-native";
-import SwitchToggle from "react-native-switch-toggle";
 import Slider from "@react-native-community/slider";
 import { Image } from "expo-image";
+import { useContext } from "react";
+import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import SwitchToggle from "react-native-switch-toggle";
 import FieldOfView from "../components/FieldOfView";
+import { AppContext } from "../context/AppContext";
 
 export default function HomeScreen() {
-  const {
-    isPortrait,
-    setIsPortrait,
-    sliderFocal,
-    setSliderFocal,
-    inputFocal,
-    setInputFocal,
-  } = useContext(AppContext);
+  const { isPortrait, setIsPortrait, sliderFocal, setSliderFocal } =
+    useContext(AppContext);
 
-  const defaultFocalLength = 16;
+  const defaultFocalLength = "16";
 
   const handleInputBlur = () => {
-    const numericValue = parseInt(inputFocal, 10);
+    const numericValue = Number(sliderFocal);
 
-    // Check if the input numericValue is a number and within the range. If not, set the slider and input focal to the default value.
+    // Check if the input numericValue is a number and within the range. If not, set the slider focal to the default value.
     if (isNaN(numericValue) || numericValue < 12 || numericValue > 85) {
       setSliderFocal(defaultFocalLength);
-      setInputFocal(String(defaultFocalLength));
-    } else {
-      setSliderFocal(numericValue); // If the input is valid, update focalLength.
     }
   };
 
@@ -61,8 +52,8 @@ export default function HomeScreen() {
         <TextInput
           style={s.focalInput}
           keyboardType="numeric"
-          value={inputFocal}
-          onChangeText={(value) => setInputFocal(value)}
+          value={sliderFocal}
+          onChangeText={(value) => setSliderFocal(value)}
           onBlur={handleInputBlur}
           maxLength={2}
         />
@@ -72,10 +63,9 @@ export default function HomeScreen() {
         minimumValue={12}
         maximumValue={85}
         step={1}
-        value={sliderFocal}
+        value={Number(sliderFocal)}
         onValueChange={(value) => {
-          setSliderFocal(value);
-          setInputFocal(String(value));
+          setSliderFocal(value.toString());
         }}
         minimumTrackTintColor="#32D932"
         maximumTrackTintColor="#111"
@@ -90,7 +80,7 @@ const s = StyleSheet.create({
   container: {
     // flex: 1,
     // backgroundColor: "#fff",
-    justifyContent: "flex-start",
+    // justifyContent: "flex-start",
     alignItems: "center",
     paddingTop: 15,
   },
