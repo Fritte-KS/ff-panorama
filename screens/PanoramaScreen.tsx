@@ -1,7 +1,15 @@
-import { StyleSheet, Text, View, SectionList } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  SectionList,
+  TouchableOpacity,
+} from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../navigators/RootStackNavigator";
 import { Image } from "expo-image";
+import { useState, useEffect } from "react";
+import { Gyroscope } from "expo-sensors";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Panorama">;
 
@@ -20,6 +28,43 @@ const steps = [
 ];
 
 export default function PanoramaScreen({ navigation }: Props) {
+  const [isMeasuring, setIsMeasuring] = useState(false);
+  const [currentRotationZ, setCurrentRotationZ] = useState(0);
+  const [subscription, setSubscription] = useState<any>(null);
+
+  const toggleGyroscope = () => {
+    if (isMeasuring) {
+      stopGyroscope();
+    } else {
+      startGyroscope();
+    }
+    setIsMeasuring(!isMeasuring);
+  };
+
+  const startGyroscope = () => {
+    let angleSum = 0; // Initialize angle sum.
+
+    const sub = Gyroscope.addListener(({ z }) => {
+      angleSum += z * 0.01; // Add the z-axis rotation to the sum (0.01 is the sampling interval/sensitivity).
+      setCurrentRotationZ(angleSum * (180 / Math.PI)); // Convert radians to degrees.
+    });
+
+    setSubscription(sub);
+  };
+
+  const stopGyroscope = () => {
+    if (subscription) {
+      subscription.remove();
+      setSubscription(null);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      stopGyroscope();
+    };
+  }, []);
+
   return (
     <View style={s.container}>
       <Text style={s.header}>Let's create a panorama</Text>
@@ -39,6 +84,17 @@ export default function PanoramaScreen({ navigation }: Props) {
           <Text style={s.stepHeader}>{title}</Text>
         )}
       />
+      <View style={s.buttonWrapper}>
+        <TouchableOpacity
+          style={[s.button, isMeasuring ? s.stopButton : s.goButton]}
+          onPress={toggleGyroscope}
+        >
+          <Text style={s.buttonText}>{isMeasuring ? "STOP" : "GO"}</Text>
+          <Text style={s.rotationText}>
+            {Math.abs(currentRotationZ).toFixed(1)}°
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -82,5 +138,35 @@ const s = StyleSheet.create({
     fontSize: 18,
     marginBottom: 5,
     // textAlign: "center",
+  },
+  buttonWrapper: {
+    alignItems: "center",
+    marginBottom: 15,
+  },
+  button: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "#bbb",
+    borderWidth: 3,
+  },
+  goButton: {
+    backgroundColor: "#11b932",
+  },
+  stopButton: {
+    backgroundColor: "orange",
+  },
+  buttonText: {
+    fontSize: 24,
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  rotationText: {
+    fontSize: 18,
+    color: "#fff",
+    marginLeft: 3,
+    marginTop: 10,
   },
 });
