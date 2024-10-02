@@ -7,7 +7,7 @@ import calculateAngleOfView from "../utils/calculateAngleOfView";
 export default function FieldOfView() {
   const { sliderFocal, isPortrait } = useContext(AppContext);
 
-  const angleOfView = calculateAngleOfView(sliderFocal, isPortrait);
+  const angleOfView = calculateAngleOfView(Number(sliderFocal), isPortrait);
 
   const radius = 150; // The radius of the circle.
   const centerX = 130;
