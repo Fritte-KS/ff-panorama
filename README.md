@@ -2,7 +2,7 @@
 
 ### Project description:
 
-This project is a mobile application built using React Native, TypeScript, and Expo. The app allows users to capture panoramas with a predefined overlap between images by measuring the rotation of their device. The angle of overlap is determined by a combination of focal length and camera orientation, which can easily be adjusted through the app's user interface. Users can start and stop the capturing process with a simple tap. The app also provides real-time feedback on the current rotation angle and an indication of when to take the next picture.
+This project is a mobile application built using React Native, TypeScript, and Expo. The app allows users to capture panoramas with a predefined overlap between images by measuring the rotation of their device. The angle of overlap is determined by a combination of focal length and camera orientation, which can be easily adjusted through the app's user interface. Users can start and stop the capturing process with a simple tap. The app provides real-time feedback on the current rotation angle and notifies users with both a sound notification and a visual text indication when it’s time to take the next picture.
 
 For more information about React Native, visit the [official React Native website](https://reactnative.dev/).
 For more information about Expo, visit the [official Expo website](https://docs.expo.dev/).
