@@ -8,8 +8,11 @@ import {
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../navigators/RootStackNavigator";
 import { Image } from "expo-image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { AppContext } from "../context/AppContext";
 import { Gyroscope } from "expo-sensors";
+import { Audio } from "expo-av";
+import calculateAngleOfView from "../utils/calculateAngleOfView";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Panorama">;
 
@@ -29,24 +32,56 @@ const steps = [
 
 export default function PanoramaScreen({ navigation }: Props) {
   const [isMeasuring, setIsMeasuring] = useState(false);
-  const [currentRotationZ, setCurrentRotationZ] = useState(0);
+  const [currentAngleZ, setCurrentAngleZ] = useState(0);
   const [subscription, setSubscription] = useState<any>(null);
+  const [sound, setSound] = useState<Audio.Sound | null>(null);
+  const [lastPlayedAngle, setLastPlayedAngle] = useState(0);
+  const [hasPlayedSound, setHasPlayedSound] = useState(false);
+  const { sliderFocal, isPortrait } = useContext(AppContext);
 
   const toggleGyroscope = () => {
     if (isMeasuring) {
       stopGyroscope();
+      setLastPlayedAngle(0);
+      setHasPlayedSound(false);
     } else {
       startGyroscope();
     }
     setIsMeasuring(!isMeasuring);
   };
 
+  const angleOfView = calculateAngleOfView(Number(sliderFocal), isPortrait);
+  const nonOverlapAngle = angleOfView * 0.7; // 30% image overlap, adjust as needed.
+
   const startGyroscope = () => {
-    let angleSum = 0; // Initialize angle sum.
+    let angleSum = 0;
+    const threshold = 0.01; // Set the threshold to 0.01 radians.
+
+    Gyroscope.setUpdateInterval(100); // Set the update interval to 100 ms.
 
     const sub = Gyroscope.addListener(({ z }) => {
-      angleSum += z * 0.01; // Add the z-axis rotation to the sum (0.01 is the sampling interval/sensitivity).
-      setCurrentRotationZ(angleSum * (180 / Math.PI)); // Convert radians to degrees.
+      if (Math.abs(z) > threshold) {
+        angleSum += z * 0.1; // Add the z-axis rotation to the sum (0.1 is the sensitivity).
+      }
+
+      const angleSumDegrees = angleSum * (180 / Math.PI); // Convert radians to degrees.
+      setCurrentAngleZ(angleSumDegrees);
+
+      const positiveAngleSum = Math.abs(angleSumDegrees);
+      const multipleThreshold =
+        Math.floor(positiveAngleSum / nonOverlapAngle) * nonOverlapAngle;
+
+      if (
+        positiveAngleSum >= multipleThreshold &&
+        multipleThreshold !== lastPlayedAngle &&
+        !hasPlayedSound
+      ) {
+        playSound();
+        setHasPlayedSound(true);
+        setLastPlayedAngle(multipleThreshold);
+      } else if (positiveAngleSum < multipleThreshold) {
+        setHasPlayedSound(false);
+      }
     });
 
     setSubscription(sub);
@@ -58,6 +93,26 @@ export default function PanoramaScreen({ navigation }: Props) {
       setSubscription(null);
     }
   };
+
+  const playSound = async () => {
+    try {
+      const { sound } = await Audio.Sound.createAsync(
+        require("../assets/sounds/level-up.mp3")
+      );
+      setSound(sound);
+      await sound.playAsync();
+    } catch (error) {
+      console.error("Error playing sound:", error);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (sound) {
+        sound.unloadAsync();
+      }
+    };
+  }, [sound]);
 
   useEffect(() => {
     return () => {
@@ -90,10 +145,11 @@ export default function PanoramaScreen({ navigation }: Props) {
           onPress={toggleGyroscope}
         >
           <Text style={s.buttonText}>{isMeasuring ? "STOP" : "GO"}</Text>
-          <Text style={s.rotationText}>
-            {Math.abs(currentRotationZ).toFixed(1)}°
-          </Text>
+          <Text style={s.angleText}>{Math.abs(currentAngleZ).toFixed(1)}°</Text>
         </TouchableOpacity>
+        <Text style={s.nextPictureText}>
+          Next picture at angle: {lastPlayedAngle.toFixed(1)}°
+        </Text>
       </View>
     </View>
   );
@@ -102,7 +158,6 @@ export default function PanoramaScreen({ navigation }: Props) {
 const s = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "flex-start",
     paddingTop: 15,
@@ -122,8 +177,6 @@ const s = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     paddingHorizontal: 8,
-    // marginTop: 10,
-    // textAlign: "center",
   },
   item: {
     flexDirection: "row",
@@ -131,13 +184,11 @@ const s = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 8,
     paddingTop: 3,
-    // paddingBottom: 0,
-    marginVertical: 4,
+    marginVertical: 5,
   },
   stepText: {
     fontSize: 18,
     marginBottom: 5,
-    // textAlign: "center",
   },
   buttonWrapper: {
     alignItems: "center",
@@ -151,6 +202,7 @@ const s = StyleSheet.create({
     alignItems: "center",
     borderColor: "#bbb",
     borderWidth: 3,
+    marginTop: 10,
   },
   goButton: {
     backgroundColor: "#11b932",
@@ -163,10 +215,15 @@ const s = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
   },
-  rotationText: {
+  angleText: {
     fontSize: 18,
     color: "#fff",
     marginLeft: 3,
+    marginTop: 10,
+  },
+  nextPictureText: {
+    fontSize: 20,
+    fontWeight: "bold",
     marginTop: 10,
   },
 });
