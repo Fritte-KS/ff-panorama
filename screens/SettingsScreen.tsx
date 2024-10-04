@@ -17,7 +17,8 @@ type Props = CompositeScreenProps<
 export default function SettingsScreen(props: Props) {
   return (
     <View style={s.container}>
-      <Text>Settings Screen</Text>
+      <Text style={s.header}>Awesome features are coming soon!</Text>
+      <Text style={s.header}>Stay tuned for epic updates 🚀</Text>
       <TouchableOpacity
         style={s.button}
         onPress={() => props.navigation.navigate("Panorama")}
@@ -31,16 +32,19 @@ export default function SettingsScreen(props: Props) {
 const s = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
+  header: {
+    fontSize: 20,
+    marginBottom: 8,
+  },
   button: {
     backgroundColor: "#007BFF",
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
     borderRadius: 5,
-    marginTop: 20,
+    marginTop: 80,
   },
   buttonText: {
     color: "#fff",
