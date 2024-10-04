@@ -36,14 +36,14 @@ export default function PanoramaScreen({ navigation }: Props) {
   const [subscription, setSubscription] = useState<any>(null);
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [lastPlayedAngle, setLastPlayedAngle] = useState(0);
-  const [hasPlayedSound, setHasPlayedSound] = useState(false);
+  // const [hasPlayedSound, setHasPlayedSound] = useState(false);
   const { sliderFocal, isPortrait } = useContext(AppContext);
 
   const toggleGyroscope = () => {
     if (isMeasuring) {
       stopGyroscope();
       setLastPlayedAngle(0);
-      setHasPlayedSound(false);
+      // setHasPlayedSound(false);
     } else {
       startGyroscope();
     }
@@ -55,6 +55,7 @@ export default function PanoramaScreen({ navigation }: Props) {
 
   const startGyroscope = () => {
     let angleSum = 0;
+    let numberOfPlays = 0;
     const threshold = 0.01; // Set the threshold to 0.01 radians.
 
     Gyroscope.setUpdateInterval(100); // Set the update interval to 100 ms.
@@ -67,20 +68,16 @@ export default function PanoramaScreen({ navigation }: Props) {
       const angleSumDegrees = angleSum * (180 / Math.PI); // Convert radians to degrees.
       setCurrentAngleZ(angleSumDegrees);
 
-      const positiveAngleSum = Math.abs(angleSumDegrees);
+      const absAngleSum = Math.abs(angleSumDegrees);
       const multipleThreshold =
-        Math.floor(positiveAngleSum / nonOverlapAngle) * nonOverlapAngle;
+        Math.floor(absAngleSum / nonOverlapAngle) * nonOverlapAngle;
 
-      if (
-        positiveAngleSum >= multipleThreshold &&
-        multipleThreshold !== lastPlayedAngle &&
-        !hasPlayedSound
-      ) {
+      const maxPlays = Math.floor(absAngleSum / nonOverlapAngle);
+
+      if (numberOfPlays < maxPlays) {
         playSound();
-        setHasPlayedSound(true);
         setLastPlayedAngle(multipleThreshold);
-      } else if (positiveAngleSum < multipleThreshold) {
-        setHasPlayedSound(false);
+        numberOfPlays++;
       }
     });
 
