@@ -36,14 +36,12 @@ export default function PanoramaScreen({ navigation }: Props) {
   const [subscription, setSubscription] = useState<any>(null);
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [lastPlayedAngle, setLastPlayedAngle] = useState(0);
-  // const [hasPlayedSound, setHasPlayedSound] = useState(false);
   const { sliderFocal, isPortrait } = useContext(AppContext);
 
   const toggleGyroscope = () => {
     if (isMeasuring) {
       stopGyroscope();
       setLastPlayedAngle(0);
-      // setHasPlayedSound(false);
     } else {
       startGyroscope();
     }
