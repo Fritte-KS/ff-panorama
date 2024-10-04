@@ -78,9 +78,6 @@ export default function HomeScreen() {
 
 const s = StyleSheet.create({
   container: {
-    // flex: 1,
-    // backgroundColor: "#fff",
-    // justifyContent: "flex-start",
     alignItems: "center",
     paddingTop: 15,
   },
@@ -140,6 +137,5 @@ const s = StyleSheet.create({
   focalSlider: {
     width: "80%",
     height: 15,
-    // marginVertical: 12,
   },
 });
