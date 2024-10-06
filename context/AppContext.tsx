@@ -15,8 +15,8 @@ export const AppContext = createContext<Props>({
 });
 
 export default function AppProvider({ children }: PropsWithChildren<{}>) {
-  const [isPortrait, setIsPortrait] = useState(false);
-  const [sliderFocal, setSliderFocal] = useState("16");
+  const [isPortrait, setIsPortrait] = useState<boolean>(false);
+  const [sliderFocal, setSliderFocal] = useState<string>("16");
 
   return (
     <AppContext.Provider

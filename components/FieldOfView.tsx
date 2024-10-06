@@ -7,25 +7,28 @@ import calculateAngleOfView from "../utils/calculateAngleOfView";
 export default function FieldOfView() {
   const { sliderFocal, isPortrait } = useContext(AppContext);
 
-  const angleOfView = calculateAngleOfView(Number(sliderFocal), isPortrait);
+  const angleOfView: number = calculateAngleOfView(
+    Number(sliderFocal),
+    isPortrait
+  );
 
-  const radius = 150; // The radius of the circle.
-  const centerX = 130;
-  const centerY = 152;
+  const radius: number = 150; // The radius of the circle.
+  const centerX: number = 130;
+  const centerY: number = 152;
 
-  const startAngle = 270 - angleOfView / 2;
-  const endAngle = 270 + angleOfView / 2;
+  const startAngle: number = 270 - angleOfView / 2;
+  const endAngle: number = 270 + angleOfView / 2;
 
-  const startRadians = (startAngle * Math.PI) / 180;
-  const endRadians = (endAngle * Math.PI) / 180;
+  const startRadians: number = (startAngle * Math.PI) / 180;
+  const endRadians: number = (endAngle * Math.PI) / 180;
 
-  const x1 = centerX + radius * Math.cos(startRadians);
-  const y1 = centerY + radius * Math.sin(startRadians);
-  const x2 = centerX + radius * Math.cos(endRadians);
-  const y2 = centerY + radius * Math.sin(endRadians);
+  const x1: number = centerX + radius * Math.cos(startRadians);
+  const y1: number = centerY + radius * Math.sin(startRadians);
+  const x2: number = centerX + radius * Math.cos(endRadians);
+  const y2: number = centerY + radius * Math.sin(endRadians);
 
-  const largeArcFlag = angleOfView <= 180 ? "0" : "1";
-  const pathData = `
+  const largeArcFlag: string = angleOfView <= 180 ? "0" : "1";
+  const pathData: string = `
     M ${centerX},${centerY}
     L ${x1},${y1} 
     A ${radius},${radius} 0 ${largeArcFlag},1 ${x2},${y2} 

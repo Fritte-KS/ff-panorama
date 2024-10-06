@@ -31,11 +31,11 @@ const steps = [
 ];
 
 export default function PanoramaScreen({ navigation }: Props) {
-  const [isMeasuring, setIsMeasuring] = useState(false);
-  const [currentAngleZ, setCurrentAngleZ] = useState(0);
+  const [isMeasuring, setIsMeasuring] = useState<boolean>(false);
+  const [currentAngleZ, setCurrentAngleZ] = useState<number>(0);
   const [subscription, setSubscription] = useState<any>(null);
   const [sound, setSound] = useState<Audio.Sound | null>(null);
-  const [lastPlayedAngle, setLastPlayedAngle] = useState(0);
+  const [lastPlayedAngle, setLastPlayedAngle] = useState<number>(0);
   const { sliderFocal, isPortrait } = useContext(AppContext);
 
   const toggleGyroscope = () => {
@@ -49,32 +49,32 @@ export default function PanoramaScreen({ navigation }: Props) {
   };
 
   const angleOfView = calculateAngleOfView(Number(sliderFocal), isPortrait);
-  const nonOverlapAngle = angleOfView * 0.7; // 30% image overlap, adjust as needed.
+  const nonOverlapAngle: number = angleOfView * 0.7; // 30% image overlap, adjust as needed.
 
   const startGyroscope = () => {
-    let angleSum = 0;
-    let numberOfPlays = 0;
-    const threshold = 0.01; // Set the threshold to 0.01 radians.
+    let angleSum: number = 0;
+    let numberOfPlays: number = 0;
+    const gyroThreshold: number = 0.01; // Set the threshold to 0.01 radians.
 
     Gyroscope.setUpdateInterval(100); // Set the update interval to 100 ms.
 
     const sub = Gyroscope.addListener(({ z }) => {
-      if (Math.abs(z) > threshold) {
+      if (Math.abs(z) > gyroThreshold) {
         angleSum += z * 0.1; // Add the z-axis rotation to the sum (0.1 is the sensitivity).
       }
 
-      const angleSumDegrees = angleSum * (180 / Math.PI); // Convert radians to degrees.
+      const angleSumDegrees: number = angleSum * (180 / Math.PI); // Convert radians to degrees.
       setCurrentAngleZ(angleSumDegrees);
 
-      const absAngleSum = Math.abs(angleSumDegrees);
-      const multipleThreshold =
+      const absAngleSum: number = Math.abs(angleSumDegrees);
+      const nextImageAngle: number =
         Math.floor(absAngleSum / nonOverlapAngle) * nonOverlapAngle;
 
-      const maxPlays = Math.floor(absAngleSum / nonOverlapAngle);
+      const maxPlays: number = Math.floor(absAngleSum / nonOverlapAngle);
 
       if (numberOfPlays < maxPlays) {
         playSound();
-        setLastPlayedAngle(multipleThreshold);
+        setLastPlayedAngle(nextImageAngle);
         numberOfPlays++;
       }
     });
